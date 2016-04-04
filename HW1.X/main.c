@@ -56,7 +56,7 @@ int main() {
     // do your TRIS and LAT commands here
     TRISAbits.TRISA4 = 0; // Set RA4 to output (green LED)
     TRISBbits.TRISB4 = 1; // Set RB4 to input (user button)
-    LATAbits.LATA2 = 0; //Set green LED to 1 to start 
+    LATAbits.LATA4 = 0; //Set green LED to 1 to start 
 
 
     
@@ -64,13 +64,15 @@ int main() {
     _CP0_SET_COUNT(0);
 
     while(1) {
-	    // use _CP0_SET_COUNT(0) and _CP0_GET_COUNT() to test the PIC timing
-		// remember the core timer runs at half the CPU speed
-
-      if(_CP0_GET_COUNT()>=24000){
-        LATBINV = 0b100;
+        if(_CP0_GET_COUNT()>=24000){      
+        LATAbits.LATA4 = !LATAbits.LATA4;
         _CP0_SET_COUNT(0);
-      }
+        }
+	    
+        while(PORTBbits.RB4 == 0){
+            LATAbits.LATA4 = 0;
+
+        }
     }
     
     
