@@ -356,7 +356,7 @@ Loc="992 24 1918 1051"
 State=2
 Number=2
 File="myschem.sch"
-View="-17.5743 48.6159 3.31796 58.4888"
+View="-71.3864 -18.7807 18.4465 23.671"
 WireWidths=" 0 0.3048 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0.4064 0.1524"
 PadDiameters=" 0.254 0.3048 0.4064 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0"
 PadDrills=" 0.5 0.6 0.7 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6 2 2.2 2.8 3.2 0.8"
@@ -395,10 +395,18 @@ ArcDirection=0
 AddLevel=2
 PadsSameType=0
 Layer=91
-Views=" 1: -17.5743 48.6159 3.31796 58.4888"
+Views=" 1: -71.3864 -18.7807 18.4465 23.671"
 Sheet="1"
 
 [Win_2]
+Type="CAM Processor"
+Loc="352 202 951 704"
+State=2
+Number=3
+File="myschem.brd"
+Job="/home/therrma2/Desktop/ME433_2016/Seeed_Gerber_Generater_2-layer.cam"
+
+[Win_3]
 Type="Control Panel"
 Loc="65 24 991 523"
 State=2
@@ -408,3 +416,4 @@ Number=0
 Screen="1920 1080"
 Window="Win_1"
 Window="Win_2"
+Window="Win_3"
