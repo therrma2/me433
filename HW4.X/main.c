@@ -50,7 +50,7 @@ void initSPI1(){
  RPB8Rbits.RPB8R = 0b0011; //set RPB8 (pin 17) to SDO1
  SPI1CON = 0;               //turn off spi module and reset it
  SPI1BUF;                   //clear buffer
- SPI1BRG = 39999;           //set baud
+ SPI1BRG = 1;           //set baud
  SPI1STATbits.SPIROV = 0;   // clear overflow bit
  SPI1CONbits.CKE = 1;       //set falling edge
  SPI1CONbits.MSTEN = 1;     // set as master
@@ -134,9 +134,10 @@ int main() {
     
     i = 0;
     while(1) {
-        if(_CP0_GET_COUNT()>=24000){      //1000 Hz loop
+        if(_CP0_GET_COUNT()>=24000){      //
             LATAbits.LATA4 = !LATAbits.LATA4;
             setVoltage(0,wave1[i]);
+            setVoltage(1,wave2[i]);
             i++;
             _CP0_SET_COUNT(0);
         }
