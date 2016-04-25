@@ -1,5 +1,6 @@
 #include <xc.h>
 #include <sys/attribs.h>
+#include <math.h>
 
 
 // DEVCFG0
@@ -71,7 +72,7 @@ void setVoltage(unsigned char channel, unsigned char voltage) {
     //volt = 0b0011111111110000;
     unsigned char part1;
     unsigned char part2;
-    channel = 0b0000;
+    //channel = 0b0000;
     part1 = channel<<7;
     part1 = part1|0b01110000;
     part1 = part1|(voltage>>4);
@@ -113,25 +114,47 @@ int main() {
 
     
     __builtin_enable_interrupts();
+    
+    unsigned char wave1[100];
+    int i = 0;
+    float center = 255/2, A = 255/2;
+    for (i = 0; i < 100; i++){
+        wave1[i] = (unsigned char)center + A*sin( 2 * 3.14 * i / (100));
+    }
+    
+    unsigned char wave2[100];
+    i = 0;
+    for (i = 0; i < 100; i++){
+        wave2[i] = i*255/99;
+    }
+    
     _CP0_SET_COUNT(0);
 
-//    while(1) {
-//        if(_CP0_GET_COUNT()>=24000){      
-//        LATAbits.LATA4 = !LATAbits.LATA4;
-//        _CP0_SET_COUNT(0);
-//        }
-//	    
-//        while(PORTBbits.RB4 == 0){
-//            LATAbits.LATA4 = 0;
-//
-//        }
-//    }
+    
+    
+    i = 0;
     while(1) {
-        if(_CP0_GET_COUNT()>=24000){
-            setVoltage(0,100);
+        if(_CP0_GET_COUNT()>=24000){      //1000 Hz loop
+            LATAbits.LATA4 = !LATAbits.LATA4;
+            setVoltage(0,wave1[i]);
+            i++;
             _CP0_SET_COUNT(0);
         }
+        if(i > 99){
+            i = 0;
+        }
+	    
+        while(PORTBbits.RB4 == 0){
+            LATAbits.LATA4 = 0;
+
+        }
     }
+//    while(1) {
+//        if(_CP0_GET_COUNT()>=24000){
+//            setVoltage(0,100);
+//            _CP0_SET_COUNT(0);
+//        }
+//    }
     
     
 }
