@@ -37,6 +37,27 @@
 #pragma config FUSBIDIO = ON // USB pins controlled by USB module
 #pragma config FVBUSONIO = ON // USB BUSON controlled by USB module
 
+#define CS LATBbits.LATB7
+
+void initSPI1(){
+ //RPB7Rbits.RPB7R = 0b0011; //set RPB7 (pin 16) to SS1
+ 
+    
+ TRISBbits.TRISB7 = 0;
+ CS = 1;
+ 
+ RPB8Rbits.RPB8R = 0b0011; //set RPB8 (pin 17) to SDO1
+ SPI1CON = 0;               //turn off spi module and reset it
+ SPI1BUF;                   //clear buffer
+ SPI1BRG = 11999;           //set baud
+ SPI1STATbits.SPIROV = 0;   // clear overflow bit
+ SPI1CONbits.CKE = 1;       //set falling edge
+ SPI1CONbits.MSTEN = 1;     // set as master
+ SPI1CONbits.ON = 1;        // turn on SPI1
+ 
+ 
+}
+
 int main() {
 
     __builtin_disable_interrupts();
