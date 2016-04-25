@@ -49,7 +49,7 @@ void initSPI1(){
  RPB8Rbits.RPB8R = 0b0011; //set RPB8 (pin 17) to SDO1
  SPI1CON = 0;               //turn off spi module and reset it
  SPI1BUF;                   //clear buffer
- SPI1BRG = 11999;           //set baud
+ SPI1BRG = 39999;           //set baud
  SPI1STATbits.SPIROV = 0;   // clear overflow bit
  SPI1CONbits.CKE = 1;       //set falling edge
  SPI1CONbits.MSTEN = 1;     // set as master
@@ -58,6 +58,37 @@ void initSPI1(){
  
 }
 
+unsigned char spi1_io(unsigned char write){
+    SPI1BUF = write;
+    while(!SPI1STATbits.SPIRBF){
+        ;
+    }
+    return SPI1BUF;
+}
+
+void setVoltage(unsigned char channel, unsigned char voltage) {
+    
+    //volt = 0b0011111111110000;
+    unsigned char part1;
+    unsigned char part2;
+    channel = 0b0000;
+    part1 = channel<<7;
+    part1 = part1|0b01110000;
+    part1 = part1|(voltage>>4);
+    part2 = voltage<<4;
+    //channel = channel<<7;
+    //channel = channel|0b1010011;
+    //unsigned char test;
+    //test = 0b10101010;
+    CS = 0;
+    //spi1_io(test);
+    spi1_io(part1);
+    spi1_io(part2);
+    //spi1_io(voltage);
+    CS = 1;
+        
+}
+    
 int main() {
 
     __builtin_disable_interrupts();
@@ -78,21 +109,27 @@ int main() {
     TRISAbits.TRISA4 = 0; // Set RA4 to output (green LED)
     TRISBbits.TRISB4 = 1; // Set RB4 to input (user button)
     LATAbits.LATA4 = 0; //Set green LED to 1 to start 
-
+    initSPI1();
 
     
     __builtin_enable_interrupts();
     _CP0_SET_COUNT(0);
 
+//    while(1) {
+//        if(_CP0_GET_COUNT()>=24000){      
+//        LATAbits.LATA4 = !LATAbits.LATA4;
+//        _CP0_SET_COUNT(0);
+//        }
+//	    
+//        while(PORTBbits.RB4 == 0){
+//            LATAbits.LATA4 = 0;
+//
+//        }
+//    }
     while(1) {
-        if(_CP0_GET_COUNT()>=24000){      
-        LATAbits.LATA4 = !LATAbits.LATA4;
-        _CP0_SET_COUNT(0);
-        }
-	    
-        while(PORTBbits.RB4 == 0){
-            LATAbits.LATA4 = 0;
-
+        if(_CP0_GET_COUNT()>=24000){
+            setVoltage(0,100);
+            _CP0_SET_COUNT(0);
         }
     }
     
