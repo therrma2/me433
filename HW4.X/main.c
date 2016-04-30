@@ -1,6 +1,8 @@
 #include <xc.h>
 #include <sys/attribs.h>
 #include <math.h>
+#include "i2c_slave.h"
+#include "idc_master.noint.h"
 
 
 // DEVCFG0
