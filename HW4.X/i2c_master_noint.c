@@ -9,7 +9,7 @@ void i2c_master_setup(void) {
   ANSELBbits.ANSB3 = 0;
   //TRISBbits.TRISB2 = 0;
   //TRISBbits.TRISB3 = 0;
-  I2C2BRG = 2000; //some number for 100kHz;            // I2CBRG = [1/(2*Fsck) - PGD]*Pblck - 2 
+  I2C2BRG = 53; //some number for 100kHz;            // I2CBRG = [1/(2*Fsck) - PGD]*Pblck - 2 
                                     // look up PGD for your PIC32 (104ns)  (1/(2*100,000)- .000000104)*48000000 -2
   I2C2CONbits.ON = 1;               // turn on the I2C1 module
 }

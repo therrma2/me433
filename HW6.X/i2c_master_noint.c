@@ -70,6 +70,20 @@ void write_exp(unsigned char addr, unsigned char data, unsigned char regist){
     i2c_master_stop();
 }
 
+unsigned char i2c_read(unsigned char addr,unsigned char regist){
+    unsigned char result;
+    i2c_master_start();
+    i2c_master_send(addr<<1|0);
+    i2c_master_send(regist);
+    i2c_master_restart();
+    i2c_master_send(addr<<1|1);
+    result = i2c_master_recv();
+    i2c_master_ack(1);
+    i2c_master_stop();
+    return result;
+}
+
+
 unsigned char read_exp(unsigned char addr,unsigned char regist){
     unsigned char result;
      
@@ -78,10 +92,9 @@ unsigned char read_exp(unsigned char addr,unsigned char regist){
     i2c_master_send(regist);
     i2c_master_restart();
     i2c_master_send(addr<<1|1);
-    
-    //LATAbits.LATA4 = 1;
+
     result = i2c_master_recv();
-    //LATAbits.LATA4 = 1;
+
     i2c_master_ack(1);
     i2c_master_stop();
     return result;

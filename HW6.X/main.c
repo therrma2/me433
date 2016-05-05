@@ -65,20 +65,28 @@ int main() {
     //initSPI1();
     SPI1_init();
     LCD_init();
-    
+    i2c_master_setup();
     
     __builtin_enable_interrupts();
     
+    char data_read;
     
     LCD_clearScreen(WHITE);
-    LATAbits.LATA4 = 1;
+    //LATAbits.LATA4 = 1;
     //LCD_Draw_Character(10,10,'d',BLUE);
     
     char c[100];
-    int vari = 1337;
-    sprintf(c,"Hello World %d!",vari);
+    //int vari = 1337;
+    //sprintf(c,"Hello World %d!",vari);
     
-    LCD_Draw_String(28,32,&c,BLUE);
+    //LCD_Draw_String(28,32,&c,BLUE);
     //LCD_drawPixel(0,0,RED);
+    data_read = i2c_read(IMU,0x0F);
+    char test = 0b01101001;
+    if (data_read == test){
+        LATAbits.LATA4 = 1;
+    }
+    sprintf(c,"Hello, %x",data_read);
+    LCD_Draw_String(5,5,&c,RED);
     while(1){;}
 }

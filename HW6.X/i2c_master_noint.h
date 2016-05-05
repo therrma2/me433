@@ -3,6 +3,7 @@
 // Header file for i2c_master_noint.c
 // helps implement use I2C1 as a master without using interrupts
 #define EXPADD 0b0100000
+#define IMU 0b1101010
 void i2c_master_setup(void);              // set up I2C 1 as a master, at 100 kHz
 
 void i2c_master_start(void);              // send a START signal
@@ -16,5 +17,6 @@ unsigned char read_exp(unsigned char addr,unsigned char regist);
 void write_exp(unsigned char addr, unsigned char data, unsigned char regist);
 unsigned char read_exp_pin(int pin);
 void set_exp_pin(int pin, int val);
+unsigned char i2c_read(unsigned char,unsigned char);
 #endif
 
