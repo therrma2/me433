@@ -1,8 +1,7 @@
 #include <xc.h>
 #include <sys/attribs.h>
 #include <math.h>
-#include "i2c_slave.h"
-#include "idc_master.noint.h"
+#include "i2c_master_noint.h"
 
 
 // DEVCFG0
@@ -41,6 +40,10 @@
 #pragma config FVBUSONIO = ON // USB BUSON controlled by USB module
 
 #define CS LATBbits.LATB7
+
+void initExpander(){
+}
+  
 
 void initSPI1(){
  //RPB7Rbits.RPB7R = 0b0011; //set RPB7 (pin 16) to SS1
@@ -112,10 +115,58 @@ int main() {
     TRISAbits.TRISA4 = 0; // Set RA4 to output (green LED)
     TRISBbits.TRISB4 = 1; // Set RB4 to input (user button)
     LATAbits.LATA4 = 0; //Set green LED to 1 to start 
-    initSPI1();
-
+    //initSPI1();
+    i2c_master_setup();
+    
     
     __builtin_enable_interrupts();
+    
+    unsigned char data_read;
+    
+
+    init_exp();
+    unsigned char data = 0b00000001;
+    LATAbits.LATA4 = 0;
+    write_exp(EXPADD, data,0x0A); // set G0 to high initially
+
+    //write_exp(EXPADD, data,0x0A);
+    data_read = read_exp(EXPADD,0x09);
+    data_read = data_read >> 7;
+    data_read = data_read & 0b1;
+    if (data_read == 0){
+        LATAbits.LATA4 = 1;
+    }
+    data = 0b00000000;
+    write_exp(EXPADD, data,0x0A);
+    
+    while(1){
+        ;
+        //LATAbits.LATA4 = 1;
+        //write_exp(EXPADD, data,0x0A);
+        //data_read = read_exp_pin(7);
+        //data_read = read_exp(EXPADD,0x09);
+        //data_read = data_read >> 7;
+        //data_read = data_read & 0b1;
+        //data_read = 1;
+        //LATAbits.LATA4 = 1; 
+//        if (data_read == 1){
+//            //LATAbits.LATA4 = 0; 
+//            //set_exp_pin(0,1);
+//            
+//            data = 0b00000001;
+//            write_exp(EXPADD, data,0x0A);
+//            LATAbits.LATA4 = 1;
+//        }
+//        else if (data_read == 0){
+//            LATAbits.LATA4 = 0; 
+//            data = 0b00000000;
+//            write_exp(EXPADD,data,0x0A);
+//            //set_exp_pin(0,0);
+//            LATAbits.LATA4 = 0;
+//            
+//        }
+    }
+
     
     unsigned char wave1[100];
     int i = 0;
