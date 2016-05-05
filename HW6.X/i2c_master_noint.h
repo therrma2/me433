@@ -14,9 +14,9 @@ void i2c_master_ack(int val);             // send an ACK (0) or NACK (1)
 void i2c_master_stop(void);               // send a stop
 void init_exp(void);
 unsigned char read_exp(unsigned char addr,unsigned char regist);
-void write_exp(unsigned char addr, unsigned char data, unsigned char regist);
+void i2c_write(unsigned char addr, unsigned char data, unsigned char regist);
 unsigned char read_exp_pin(int pin);
 void set_exp_pin(int pin, int val);
-unsigned char i2c_read(unsigned char,unsigned char);
+void i2c_read(unsigned char addr,unsigned char regist, char *result);
 #endif
 

@@ -191,7 +191,6 @@ void LCD_clearScreen(unsigned short color) {
 }
 
 void LCD_Draw_Character(unsigned short x, unsigned short y, char character,unsigned short color){
-    ASCII[96][5];
     int i,j;
     char val;
     char test;

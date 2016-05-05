@@ -3,6 +3,7 @@
 #include <math.h>
 #include "i2c_master_noint.h"
 #include "ILI9163C.h"
+#include "imu.h"
 
 
 // DEVCFG0
@@ -66,10 +67,12 @@ int main() {
     SPI1_init();
     LCD_init();
     i2c_master_setup();
-    
+    imu_init();
     __builtin_enable_interrupts();
     
-    char data_read;
+    char imu_raw[14];
+    short imu_parsed[7];
+    unsigned char result[14];
     
     LCD_clearScreen(WHITE);
     //LATAbits.LATA4 = 1;
@@ -81,12 +84,37 @@ int main() {
     
     //LCD_Draw_String(28,32,&c,BLUE);
     //LCD_drawPixel(0,0,RED);
-    data_read = i2c_read(IMU,0x0F);
-    char test = 0b01101001;
-    if (data_read == test){
-        LATAbits.LATA4 = 1;
+
+    //sprintf(c,"Hello, %x",data_read);
+    //LCD_Draw_String(5,5,&c,RED);
+    while(1){
+        
+        i2c_read(IMU,0x20,imu_raw);
+        parse_imu(imu_raw,imu_parsed);
+        
+        sprintf(c,"%x",imu_parsed[0]);
+        LCD_Draw_String(5,5,&c,RED);
+        
+        sprintf(c,"%x",imu_parsed[1]);
+        LCD_Draw_String(5,14,&c,BLUE);
+        
+        sprintf(c,"%x",imu_parsed[2]);
+        LCD_Draw_String(5,23,&c,GREEN);
+        
+        sprintf(c,"%x",imu_parsed[3]);
+        LCD_Draw_String(5,32,&c,MAGENTA);
+        
+        sprintf(c,"%x",imu_parsed[4]);
+        LCD_Draw_String(5,41,&c,YELLOW);
+        
+        sprintf(c,"%x",imu_parsed[5]);
+        LCD_Draw_String(5,50,&c,CYAN);
+        
+        sprintf(c,"%x",imu_parsed[6]);
+        LCD_Draw_String(5,59,&c,BLACK);
+        
+
+        LATAbits.LATA4 = !LATAbits.LATA4;
+    
     }
-    sprintf(c,"Hello, %x",data_read);
-    LCD_Draw_String(5,5,&c,RED);
-    while(1){;}
 }
