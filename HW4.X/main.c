@@ -125,46 +125,46 @@ int main() {
     
 
     init_exp();
-    unsigned char data = 0b00000001;
+    unsigned char data = 0b00000000;
     LATAbits.LATA4 = 0;
     write_exp(EXPADD, data,0x0A); // set G0 to high initially
 
     //write_exp(EXPADD, data,0x0A);
-    data_read = read_exp(EXPADD,0x09);
-    data_read = data_read >> 7;
-    data_read = data_read & 0b1;
-    if (data_read == 0){
-        LATAbits.LATA4 = 1;
-    }
-    data = 0b00000000;
-    write_exp(EXPADD, data,0x0A);
+    //data_read = read_exp(EXPADD,0x09);
+    //data_read = data_read >> 7;
+    //data_read = data_read & 0b1;
+    //if (data_read == 0){
+    //    LATAbits.LATA4 = 1;
+    //}
+    //data = 0b00000000;
+    //write_exp(EXPADD, data,0x0A);
     
     while(1){
-        ;
+        
         //LATAbits.LATA4 = 1;
         //write_exp(EXPADD, data,0x0A);
         //data_read = read_exp_pin(7);
-        //data_read = read_exp(EXPADD,0x09);
-        //data_read = data_read >> 7;
-        //data_read = data_read & 0b1;
+        data_read = read_exp(EXPADD,0x09);
+        data_read = data_read >> 7;
+        data_read = data_read & 0b1;
         //data_read = 1;
         //LATAbits.LATA4 = 1; 
-//        if (data_read == 1){
-//            //LATAbits.LATA4 = 0; 
+        if (data_read == 1){
+            LATAbits.LATA4 = 1; 
 //            //set_exp_pin(0,1);
 //            
-//            data = 0b00000001;
-//            write_exp(EXPADD, data,0x0A);
+            data = 0b00000001;
+            write_exp(EXPADD, data,0x0A);
 //            LATAbits.LATA4 = 1;
-//        }
-//        else if (data_read == 0){
+        }
+        else if (data_read == 0){
 //            LATAbits.LATA4 = 0; 
-//            data = 0b00000000;
-//            write_exp(EXPADD,data,0x0A);
+            data = 0b00000000;
+            write_exp(EXPADD,data,0x0A);
 //            //set_exp_pin(0,0);
-//            LATAbits.LATA4 = 0;
+            LATAbits.LATA4 = 0;
 //            
-//        }
+        }
     }
 
     
