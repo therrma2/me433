@@ -79,5 +79,6 @@ int main() {
     sprintf(c,"Hello World %d!",vari);
     
     LCD_Draw_String(28,32,&c,BLUE);
+    //LCD_drawPixel(0,0,RED);
     while(1){;}
 }

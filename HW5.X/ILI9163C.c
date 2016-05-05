@@ -222,9 +222,9 @@ void LCD_Draw_String(unsigned short x, unsigned short y, char *string,unsigned s
         LCD_Draw_Character(x,y,string[i],color);
         x = x+6;
         i++;
-        //if (x > 122){
-        //    x = x_start;
-        //    y = y + 9;                    
-        //}
+        if (x > 123){
+            x = x_start;
+            y = y + 9;                    
+        }
     }
 }
