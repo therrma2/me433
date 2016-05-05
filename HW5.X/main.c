@@ -75,8 +75,9 @@ int main() {
     //LCD_Draw_Character(10,10,'d',BLUE);
     
     char c[100];
-    sprintf(c,"Suck it, Mikhail! I hope this will wrap to the next line!");
+    int vari = 1337;
+    sprintf(c,"Hello World %d!",vari);
     
-    LCD_Draw_String(1,1,&c,BLUE);
+    LCD_Draw_String(28,32,&c,BLUE);
     while(1){;}
 }
