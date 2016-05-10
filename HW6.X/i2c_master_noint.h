@@ -17,6 +17,6 @@ unsigned char read_exp(unsigned char addr,unsigned char regist);
 void i2c_write(unsigned char addr, unsigned char data, unsigned char regist);
 unsigned char read_exp_pin(int pin);
 void set_exp_pin(int pin, int val);
-void i2c_read(unsigned char addr,unsigned char regist, char *result);
+void i2c_read(unsigned char addr,unsigned char regist, unsigned char *result);
 #endif
 

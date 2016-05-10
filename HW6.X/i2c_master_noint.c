@@ -9,7 +9,7 @@ void i2c_master_setup(void) {
   ANSELBbits.ANSB3 = 0;
   //TRISBbits.TRISB2 = 0;
   //TRISBbits.TRISB3 = 0;
-  I2C2BRG = 2000; //some number for 100kHz;            // I2CBRG = [1/(2*Fsck) - PGD]*Pblck - 2 
+  I2C2BRG = 53; //some number for 100kHz;            // I2CBRG = [1/(2*Fsck) - PGD]*Pblck - 2 
                                     // look up PGD for your PIC32 (104ns)  (1/(2*100,000)- .000000104)*48000000 -2
   I2C2CONbits.ON = 1;               // turn on the I2C1 module
 }
@@ -37,9 +37,10 @@ unsigned char i2c_master_recv(void) { // receive a byte from the slave
     I2C2CONbits.RCEN = 1;             // start receiving data
 
     while(!I2C2STATbits.RBF) {
-        Nop();
-        Nop();
-        Nop();
+        ;
+//        Nop();
+//        Nop();
+//        Nop();
     }    // wait to receive the data
     
     return I2C2RCV;                   // read and return the data
@@ -70,7 +71,7 @@ void i2c_write(unsigned char addr, unsigned char data, unsigned char regist){
     i2c_master_stop();
 }
 
-void i2c_read(unsigned char addr,unsigned char regist, char *result){
+void i2c_read(unsigned char addr,unsigned char regist, unsigned char *result){
     
     i2c_master_start();
     i2c_master_send(addr<<1|0);
@@ -80,21 +81,29 @@ void i2c_read(unsigned char addr,unsigned char regist, char *result){
     int i;
     for(i=0;i<14;i++){
         result[i] = i2c_master_recv();
+        if (i==13){
+            i2c_master_ack(1);
+        }
+        else {
+            i2c_master_ack(0);
+        }
     }
-    i2c_master_ack(1);
+    //i2c_master_ack(1);
     i2c_master_stop();
     
 }
 
-void parse_imu(char *raw,short *parsed){
+void parse_imu(unsigned char *raw,short *parsed){
     //starts with temp low then temp high
-    parsed[0] = (raw[1]<<8)&raw[0]; //temp
-    parsed[1] = (raw[3]<<8)&raw[2]; //gyro x
-    parsed[2] = (raw[5]<<8)&raw[4]; //gyro y
-    parsed[3] = (raw[7]<<8)&raw[6]; //gyro z
-    parsed[4] = (raw[9]<<8)&raw[8]; //acc x
-    parsed[5] = (raw[11]<<8)&raw[10]; //acc y
-    parsed[6] = (raw[13]<<8)&raw[12]; //acc z
+    parsed[0] = (raw[1]<<8);//|raw[0]; //temp
+    parsed[0] = parsed[0]|raw[0];
+    parsed[1] = (raw[3]<<8);//|raw[2]; //gyro x
+    parsed[1] = parsed[1]|raw[2];
+    parsed[2] = (raw[5]<<8)|raw[4]; //gyro y
+    parsed[3] = (raw[7]<<8)|raw[6]; //gyro z
+    parsed[4] = (raw[9]<<8)|raw[8]; //acc x
+    parsed[5] = (raw[11]<<8)|raw[10]; //acc y
+    parsed[6] = (raw[13]<<8)|raw[12]; //acc z
     
     
 }

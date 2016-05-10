@@ -68,9 +68,40 @@ int main() {
     LCD_init();
     i2c_master_setup();
     imu_init();
+    
+    //Initialize Timer2 for OC1 and OC3
+    T2CONbits.TCKPS=4;
+    PR2 = 12000;
+    T2CONbits.ON = 1;
+    
+    //Initialize OC1
+    RPA0Rbits.RPA0R = 0b0101;   //Pin 2
+    OC1CONbits.OC32=0;
+    OC1CONbits.OCTSEL = 0;
+    OC1CONbits.OCM = 0b110;
+    OC1R=0;
+    OC1RS=1000;
+    OC1CONbits.ON = 1;
+    
+    //Initialize OC2
+    RPB8Rbits.RPB8R = 0b0101; //Pin 17
+    OC2CONbits.OC32=0;
+    OC2CONbits.OCTSEL = 0;
+    OC2CONbits.OCM = 0b110;
+    OC2R=0;
+    OC2RS=1000;
+    OC2CONbits.ON =1;
+            
+   
+            
+            
+    
     __builtin_enable_interrupts();
     
-    char imu_raw[14];
+    float accX,accY,accZ=0;
+    int temp,roll,pitch,yaw = 0;
+    
+    unsigned char imu_raw[14];
     short imu_parsed[7];
     unsigned char result[14];
     
@@ -87,34 +118,67 @@ int main() {
 
     //sprintf(c,"Hello, %x",data_read);
     //LCD_Draw_String(5,5,&c,RED);
+    _CP0_SET_COUNT(0);
     while(1){
+        if (_CP0_GET_COUNT()>480000){
+            _CP0_SET_COUNT(0);
+            i2c_read(IMU,0x20,imu_raw);
+
+            parse_imu(imu_raw,imu_parsed);
         
-        i2c_read(IMU,0x20,imu_raw);
-        parse_imu(imu_raw,imu_parsed);
+            temp = imu_parsed[0];
+            accX = (float)imu_parsed[4]*2.0/32768.0;
+            accY = (float)imu_parsed[5]*2.0/32768.0;
+            accZ = (float)imu_parsed[6]*2.0/32768.0;
+            roll = imu_parsed[1];
+            pitch = imu_parsed[2];
+            yaw = imu_parsed[3];
         
-        sprintf(c,"%x",imu_parsed[0]);
-        LCD_Draw_String(5,5,&c,RED);
+//            sprintf(c,"TEMP: %.2i     ",temp);
+//            LCD_Draw_String(5,5,&c,RED);
+            if (accX > 1){
+                OC1RS = 2999;
+                }
+            else if (accX < -1) {
+                OC1RS = 0;
+                }
+            else {
+                OC1RS = accX*PR2/2+PR2/2;
+            }
+            
+            if (accY > 1){
+                OC2RS = 2999;
+                }
+            else if (accY < -1) {
+                OC2RS = 0;
+                }
+            else {
+                OC2RS = accY*PR2/2+PR2/2;
+            }
+            
+                    
+
+            sprintf(c,"x %.2f ",accX);
+            LCD_Draw_String(5,14,&c,BLUE);
         
-        sprintf(c,"%x",imu_parsed[1]);
-        LCD_Draw_String(5,14,&c,BLUE);
-        
-        sprintf(c,"%x",imu_parsed[2]);
-        LCD_Draw_String(5,23,&c,GREEN);
-        
-        sprintf(c,"%x",imu_parsed[3]);
-        LCD_Draw_String(5,32,&c,MAGENTA);
-        
-        sprintf(c,"%x",imu_parsed[4]);
-        LCD_Draw_String(5,41,&c,YELLOW);
-        
-        sprintf(c,"%x",imu_parsed[5]);
-        LCD_Draw_String(5,50,&c,CYAN);
-        
-        sprintf(c,"%x",imu_parsed[6]);
-        LCD_Draw_String(5,59,&c,BLACK);
+            sprintf(c,"y %.2f ",accY);
+            LCD_Draw_String(5,23,&c,BLUE);
+//        
+//            sprintf(c,"accZ: %.4f     ",accZ);
+//            LCD_Draw_String(5,32,&c,BLUE);
+//        
+//            sprintf(c,"vROLL: %.2i     ",roll);
+//            LCD_Draw_String(5,41,&c,RED);
+//        
+//            sprintf(c,"vPITCH: %.2i     ",pitch);
+//            LCD_Draw_String(5,50,&c,RED);
+//        
+//            sprintf(c,"vYAW: %.2i     ",yaw);
+//            LCD_Draw_String(5,59,&c,RED);
         
 
-        LATAbits.LATA4 = !LATAbits.LATA4;
-    
+            LATAbits.LATA4 = !LATAbits.LATA4;
+        
+        }
     }
 }
