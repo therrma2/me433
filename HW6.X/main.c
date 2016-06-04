@@ -103,7 +103,7 @@ int main() {
     
     unsigned char imu_raw[14];
     short imu_parsed[7];
-    unsigned char result[14];
+
     
     LCD_clearScreen(WHITE);
     //LATAbits.LATA4 = 1;
@@ -164,17 +164,17 @@ int main() {
             sprintf(c,"y %.2f ",accY);
             LCD_Draw_String(5,23,&c,BLUE);
 //        
-//            sprintf(c,"accZ: %.4f     ",accZ);
-//            LCD_Draw_String(5,32,&c,BLUE);
-//        
-//            sprintf(c,"vROLL: %.2i     ",roll);
-//            LCD_Draw_String(5,41,&c,RED);
-//        
-//            sprintf(c,"vPITCH: %.2i     ",pitch);
-//            LCD_Draw_String(5,50,&c,RED);
-//        
-//            sprintf(c,"vYAW: %.2i     ",yaw);
-//            LCD_Draw_String(5,59,&c,RED);
+            sprintf(c,"accZ: %.4f     ",accZ);
+            LCD_Draw_String(5,32,&c,BLUE);
+        
+            sprintf(c,"vROLL: %.2i     ",roll);
+            LCD_Draw_String(5,41,&c,RED);
+        
+            sprintf(c,"vPITCH: %.2i     ",pitch);
+            LCD_Draw_String(5,50,&c,RED);
+        
+            sprintf(c,"vYAW: %.2i     ",yaw);
+            LCD_Draw_String(5,59,&c,RED);
         
 
             LATAbits.LATA4 = !LATAbits.LATA4;

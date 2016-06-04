@@ -56,7 +56,7 @@ int main() {
     // do your TRIS and LAT commands here
     TRISAbits.TRISA4 = 0; // Set RA4 to output (green LED)
     TRISBbits.TRISB4 = 1; // Set RB4 to input (user button)
-    LATAbits.LATA4 = 0; //Set green LED to 1 to start 
+    LATAbits.LATA4 = 0; //Set green LED to 0 to start 
 
 
     
@@ -64,7 +64,7 @@ int main() {
     _CP0_SET_COUNT(0);
 
     while(1) {
-        if(_CP0_GET_COUNT()>=24000){      
+        if(_CP0_GET_COUNT()>=2400000){      
         LATAbits.LATA4 = !LATAbits.LATA4;
         _CP0_SET_COUNT(0);
         }

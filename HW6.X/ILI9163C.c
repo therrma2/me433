@@ -100,12 +100,12 @@ void LCD_init() {
     int i = 0;
 	LCD_command(CMD_PGAMMAC);//Positive Gamma Correction Setting
 	for (i=0;i<15;i++){
-		LCD_data(pGammaSet[i]);
+		//LCD_data(pGammaSet[i]);
 	}
 
 	LCD_command(CMD_NGAMMAC);//Negative Gamma Correction Setting
 	for (i=0;i<15;i++){
-		LCD_data(nGammaSet[i]);
+		//LCD_data(nGammaSet[i]);
 	}
 
 	LCD_command(CMD_FRMCTR1);//Frame Rate Control (In normal mode/Full colors)
@@ -191,7 +191,7 @@ void LCD_clearScreen(unsigned short color) {
 }
 
 void LCD_Draw_Character(unsigned short x, unsigned short y, char character,unsigned short color){
-    ASCII[96][5];
+    //ASCII[96][5];
     int i,j;
     char val;
     char test;
