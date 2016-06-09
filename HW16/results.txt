@@ -1,0 +1,3 @@
+In order to detect the red line, my android app analyzes a single row of pixels from the camera image.  I use three sliders to detect the color red.  One slider sets a mininum red pixel value while the other two set maximum blue and green values. The app then determines the center of the red pixels that were detected.  Using proportional control, the app calculates a value between 0 and 12000 for each wheel.  These values represent OC1RS and OC2RS values which are sent to the pic to control the motors.  12000 is 100% duty cycle.
+
+The robot was able to complete the competition track in 48 seconds and demonstrated very smooth and reliable control. A faster time could have been achieved with decreased weight and increased wheel diameter.
